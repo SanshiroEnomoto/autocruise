@@ -4,8 +4,8 @@
 
 
 const autocruise_usage = `
-This is a signle-file JavaScript library without any external dependencies.
-Create a HTML file that includes a list of <a>'s to cruise, with this script in <script>,
+This is a single-file JavaScript library without any external dependencies.
+Create an HTML file that includes a list of <a>'s to cruise, with this script in <script>,
 then the <body> will be replaced with autocruise contents.
 
 
