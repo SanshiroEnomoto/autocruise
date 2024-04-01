@@ -74,7 +74,6 @@ Currently defined parameters are:
             backgroundColor: "#303030",
             pages: []
         };
-        console.log("loaded");        
         let options = {
             configbase: '',
             interval: 0,
@@ -159,13 +158,21 @@ Currently defined parameters are:
         }
 
         let body = document.querySelector('body');
-        body.innerHTML = (`
-            <div id="header"></div>
-        `);
-        let headerDiv = document.querySelector('#header');
         body.style=`margin:0;padding:0;background-color:${config.backgroundColor};overflow:hidden`;
-        headerDiv.style="margin:0;padding:0;height:20px;width:100%;background:black;color:gray";
-
+        body.innerHTML = (`
+            <div id="header" style="height:1.2em;width:100%;background:black;color:gray">
+              <div style="display:flex">
+                <div id="status" style="flex:1 0 auto;color:gray"></div>
+                <div id="pauseBtn" style="flex:0 0  auto;margin-left:0.5em;border:thin solid;border-radius:5px">Pause</div>
+                <div id="reloadBtn" style="flex:0 0  auto;margin-left:0.5em;border:thin solid;border-radius:5px">Reload</div>
+              </div>
+            </div>
+        `);
+        context.headerDiv = document.querySelector('#header');
+        context.statusDiv = document.querySelector('#status');
+        let pauseBtn = document.querySelector('#pauseBtn');
+        let reloadBtn = document.querySelector('#reloadBtn');
+        
         if (config.title) {
             document.title = config.title;
         }
@@ -221,24 +228,33 @@ Currently defined parameters are:
             });
         }
 
-        headerDiv.addEventListener('click', e=>{
-            headerDiv.style.color = 'gray';
+        for (let div of [ context.statusDiv, pauseBtn, reloadBtn ]) {
+            div.addEventListener('mouseenter', e=>{
+                div.style.background = 'gray';
+                div.style.color = 'white';
+            });
+            div.addEventListener('mouseleave', e=>{
+                div.style.background = 'black';
+                div.style.color = 'gray';
+            });
+            div.style.cursor = 'pointer';
+        }
+        context.statusDiv.addEventListener('click', e=>{
+            context.statusDiv.style.color = 'gray';
             if (context.isInCycleViewMode) {
                 switchToTileView(config, context);
             }
         });
-        headerDiv.addEventListener('mouseenter', e=>{
-            headerDiv.style.background = 'gray';
-            headerDiv.style.color = 'white';
+        pauseBtn.addEventListener('click', e=>{
+            holdCycleView(config, context);
         });
-        headerDiv.addEventListener('mouseleave', e=>{
-            headerDiv.style.background = 'black';
-            headerDiv.style.color = 'gray';
-        });
-        headerDiv.style.cursor = 'pointer';
+        reloadBtn.addEventListener('click', e=>{
+            let divs = document.querySelectorAll('.cruise-page');
+            let iframe = divs[context.currentPage].querySelector('iframe');
+            iframe.setAttribute('src', config.pages[context.currentPage]);
 
-        context.headerDiv = document.querySelector('#header');
-        
+        });
+
         return context;
     }
 
@@ -268,8 +284,8 @@ Currently defined parameters are:
             divs[context.currentPage].style['z-index'] = '1';            
         }
 
-        if (context.headerDiv?.style?.color == 'gray') {
-            context.headerDiv.textContent = (
+        if (context.statusDiv?.style?.color == 'gray') {
+            context.statusDiv.textContent = (
                 `${context.currentPage}/${config.pages.length}, ${togo}: ${config.pages[context.currentPage]}`
             );
         }
@@ -286,13 +302,13 @@ Currently defined parameters are:
         }
         context.nextUpdate = time() + config.pauseLength;
             
-        context.headerDiv.style.color = 'red';
-        context.headerDiv.textContent = (
+        context.statusDiv.style.color = 'red';
+        context.statusDiv.textContent = (
             `Cycle view is paused for ${config.pauseLength} sec;  click here to switch to the tile view`
         );
             
         setTimeout(()=>{
-            context.headerDiv.style.color = 'gray';
+            context.statusDiv.style.color = 'gray';
         },10000);
     }
 
