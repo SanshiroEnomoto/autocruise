@@ -185,7 +185,6 @@ Currently defined parameters are:
             iframe.style.margin = '0';
             iframe.style.padding = '0';
             iframe.style.background = 'white';
-            iframe.setAttribute('src', config.pages[i]);
             
             let cover = document.createElement('div');
             cover.style.position = 'absolute';
@@ -215,19 +214,19 @@ Currently defined parameters are:
             div.appendChild(cover);
             body.appendChild(div);
 
-            // this works only for same-origin pages
-            iframe.contentWindow.addEventListener('click', e => {
-                holdCycleView(config, context);
-            });
-            
             cover.setAttribute('cruise-page', i);
             cover.addEventListener('click', e=>{
                 context.currentPage = e.target.getAttribute('cruise-page');
                 context.nextUpdate = time() + config.interval;
                 switchToCycleView(config, context);
             });
+            
+            // this works only for same-origin pages
+            iframe.contentWindow.addEventListener('click', e => {
+                holdCycleView(config, context);
+            });
         }
-
+        
         for (let div of [ context.statusDiv, pauseBtn, reloadBtn ]) {
             div.addEventListener('mouseenter', e=>{
                 div.style.background = 'gray';
@@ -255,10 +254,28 @@ Currently defined parameters are:
 
         });
 
+        loadPages(config,document.querySelectorAll('.cruise-page'));
+        
         return context;
     }
 
 
+    function loadPages(config, pageDivs, start=0) {
+        if (start >= config.pages.length) {
+            return;
+        }
+        
+        let loadNextPage = e => {
+            e.target.removeEventListener('load', loadNextPage);
+            loadPages(config, pageDivs, start+1);
+        };
+
+        let iframe = pageDivs[start].querySelector('iframe');
+        iframe.addEventListener('load', loadNextPage);
+        iframe.setAttribute('src', config.pages[start]);
+    }
+
+    
     function updateCycleView(config, context) {
         if (! context.isInCycleViewMode) {
             return;
