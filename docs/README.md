@@ -1,6 +1,7 @@
 # autocruise
 slide and tile views of web pages
 
+<img src="autocruise-screenshot.png" width="70%">
 
 ### Description
 This is a single-file JavaScript library without any external dependencies.
