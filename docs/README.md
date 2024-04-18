@@ -1,6 +1,9 @@
 # autocruise
 slide and tile views of web pages
 
+### Screenshot
+Example of "tile view"; clicking a tile will switch the mode to "slide view", starting from the clicked tile.
+
 <img src="autocruise-screenshot.png" width="70%">
 
 ### Description
