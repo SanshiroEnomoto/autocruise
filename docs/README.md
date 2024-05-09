@@ -1,9 +1,12 @@
 # autocruise
 slide and tile views of web pages
 
+### Screenshot
+Example of "tile view"; clicking a tile will switch the mode to "slide view", starting from the clicked tile.
+
 <img src="autocruise-screenshot.png" width="70%">
 
-### Description
+### Usage
 This is a single-file JavaScript library without any external dependencies.
 Create an HTML file that includes a list of <a>'s to cruise, with this script in <script>,
 then the <body> will be replaced with autocruise contents.
