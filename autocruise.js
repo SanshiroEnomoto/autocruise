@@ -271,7 +271,7 @@ Currently defined parameters are:
         };
 
         let iframe = pageDivs[start].querySelector('iframe');
-        iframe.addEventListener('load', loadNextPage);
+        iframe.addEventListener('load', loadNextPage);  // this will be called even if the loading failed
         iframe.setAttribute('src', config.pages[start]);
     }
 
