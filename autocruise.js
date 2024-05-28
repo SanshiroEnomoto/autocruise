@@ -165,6 +165,7 @@ Currently defined parameters are:
                 <div id="status" style="flex:1 0 auto;color:gray"></div>
                 <div id="pauseBtn" style="flex:0 0  auto;margin-left:0.5em;border:thin solid;border-radius:5px">Pause</div>
                 <div id="reloadBtn" style="flex:0 0  auto;margin-left:0.5em;border:thin solid;border-radius:5px">Reload</div>
+                <div id="popoutBtn" style="flex:0 0  auto;margin-left:0.5em;border:thin solid;border-radius:5px">Pop out</div>
               </div>
             </div>
         `);
@@ -172,6 +173,7 @@ Currently defined parameters are:
         context.statusDiv = document.querySelector('#status');
         let pauseBtn = document.querySelector('#pauseBtn');
         let reloadBtn = document.querySelector('#reloadBtn');
+        let popoutBtn = document.querySelector('#popoutBtn');
         
         if (config.title) {
             document.title = config.title;
@@ -227,7 +229,7 @@ Currently defined parameters are:
             });
         }
         
-        for (let div of [ context.statusDiv, pauseBtn, reloadBtn ]) {
+        for (let div of [ context.statusDiv, pauseBtn, reloadBtn, popoutBtn ]) {
             div.addEventListener('mouseenter', e=>{
                 div.style.background = 'gray';
                 div.style.color = 'white';
@@ -251,7 +253,9 @@ Currently defined parameters are:
             let divs = document.querySelectorAll('.cruise-page');
             let iframe = divs[context.currentPage].querySelector('iframe');
             iframe.setAttribute('src', config.pages[context.currentPage]);
-
+        });
+        popoutBtn.addEventListener('click', e=>{
+            window.open(config.pages[context.currentPage]);
         });
 
         loadPages(config,document.querySelectorAll('.cruise-page'));
