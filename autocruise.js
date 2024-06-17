@@ -116,7 +116,7 @@ Currently defined parameters are:
                 .catch(e => {
                     document.write(`
                         <h3>Autocruise Configuration Error</h3>
-                         URL: ${options.conf}<br>
+                         URL: ${options.config}<br>
                          Error: ${e.message}
                     `);
                     return null;
