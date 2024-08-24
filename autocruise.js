@@ -361,7 +361,7 @@ Currently defined parameters are:
                 divs[i].style['z-index'] = '0';
             }
 
-            iframe.contentWindow.postMessage('resize', '"*"');
+            iframe.contentWindow.postMessage('resize', "*");
         }
         
         context.isInCycleViewMode = true;
@@ -407,7 +407,7 @@ Currently defined parameters are:
             cover.style.height = height / scale + "px";
             cover.style.display = 'block';
 
-            iframe.contentWindow.postMessage('resize', '"*"');
+            iframe.contentWindow.postMessage('resize', "*");
         }
     }
 
@@ -439,7 +439,7 @@ Currently defined parameters are:
                 const n = pageDivs.length;
                 for (let i = 0; i < n; i++) {
                     let iframe = pageDivs[i].querySelector('iframe');
-                    iframe.contentWindow.postMessage('resize', '"*"');
+                    iframe.contentWindow.postMessage('resize', "*");
                 }
             });
             
