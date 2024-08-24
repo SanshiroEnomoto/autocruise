@@ -360,6 +360,8 @@ Currently defined parameters are:
             else {
                 divs[i].style['z-index'] = '0';
             }
+
+            iframe.contentWindow.postMessage('resize', '*');
         }
         
         context.isInCycleViewMode = true;
@@ -404,6 +406,8 @@ Currently defined parameters are:
             cover.style.width = width / scale + "px";
             cover.style.height = height / scale + "px";
             cover.style.display = 'block';
+
+            iframe.contentWindow.postMessage('resize', '*');
         }
     }
 
@@ -422,15 +426,31 @@ Currently defined parameters are:
                 switchToCycleView(config, context);
             }
 
-            window.addEventListener('resize', e => {
+            let resize = () => {
                 if (context.isInCycleViewMode) {
                     switchToCycleView(config, context);
                 }
                 else {
                     switchToTileView(config, context);
                 }
+
+                // send the resize message to the page iframes, in case an autocruise is nested in the iframe
+                let pageDivs = document.querySelectorAll('.cruise-page');
+                const n = pageDivs.length;
+                for (let i = 0; i < n; i++) {
+                    let iframe = pageDivs[i].querySelector('iframe');
+                    iframe.contentWindow.postMessage('resize', '*');
+                }
             });
             
+            window.addEventListener('resize', e => {  // top-level autocruise: window event
+                resize();
+            });
+            window.addEventListener('message', e => { // nested autocruise: message from parent
+                if (e.data === 'resize') {
+                    resize();
+                }
+            });
         });
     });
 
