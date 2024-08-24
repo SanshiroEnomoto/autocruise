@@ -410,15 +410,27 @@ Currently defined parameters are:
     
     window.addEventListener('DOMContentLoaded', e => {
         loadConfig((config) => {
-            if (config.pages.length > 0) {
-                let context = build(config);
-                if (config.view == 'tile') {
-                    switchToTileView(config, context);
-                }
-                else {
+            if (config.pages.length == 0) {
+                return;
+            }
+            
+            let context = build(config);
+            if (config.view == 'tile') {
+                switchToTileView(config, context);
+            }
+            else {
+                switchToCycleView(config, context);
+            }
+
+            window.addEventListener('resize', e => {
+                if (context.isInCycleViewMode) {
                     switchToCycleView(config, context);
                 }
-            }
+                else {
+                    switchToTileView(config, context);
+                }
+            });
+            
         });
     });
 
