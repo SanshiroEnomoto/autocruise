@@ -426,7 +426,7 @@ Currently defined parameters are:
                 switchToCycleView(config, context);
             }
 
-            let resize = () => {
+            let resize = (() => {
                 if (context.isInCycleViewMode) {
                     switchToCycleView(config, context);
                 }
