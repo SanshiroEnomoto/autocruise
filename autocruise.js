@@ -67,23 +67,24 @@ Currently defined parameters are:
     
     function loadConfig(then) {
         let config = {
-            titie: null,
+            title: null,
             view: 'cycle',
             interval: 60,
             pauseLength: 180,
             backgroundColor: "#303030",
             pages: []
         };
-        let options = {
+        let attributes = {
             configbase: '',
             interval: 0,
             view: null,
         };
-        // take options from body attributes (start with autocruise-)
+        let options = {};
+        // take attributes from body (start with autocruise-)
         let body = document.querySelector('body');
         for (const attr of body.attributes) {
             if (attr.name.substr(0, 11) == 'autocruise-') {
-                options[attr.name.substr(11)] = attr.value;
+                attributes[attr.name.substr(11)] = attr.value;
             }
         }
         // take options from URL
@@ -95,8 +96,15 @@ Currently defined parameters are:
             }
         }
 
+        if (parseFloat(attributes.interval??0) > 0) {
+            config.interval = parseFloat(attributes.interval);
+        }
+        if (attributes.view) {
+            config.view = attributes.view;
+        }
+        
         let done = () => {
-            if (parseFloat(options.interval) > 0) {
+            if (parseFloat(options.interval??0) > 0) {
                 config.interval = parseFloat(options.interval);
             }
             if (options.view) {
@@ -106,7 +114,7 @@ Currently defined parameters are:
         }
 
         if (options.config) {
-            fetch(options.configbase + options.config)
+            fetch(attributes.configbase + options.config)
                 .then(response => {
                     if (! response.ok) {
                         throw new Error(response.status + " " + response.statusText);
