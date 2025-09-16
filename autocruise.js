@@ -64,6 +64,18 @@ Currently defined parameters are:
         return Math.floor((new Date()).getTime()/1000.0);
     }
 
+    function escapeHtml(value) {
+        if (value == null) {
+            return '';
+        }
+        return String(value)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#39;");
+    }
+
     
     function loadConfig(then) {
         let config = {
@@ -119,10 +131,12 @@ Currently defined parameters are:
                     return response.json();
                 })
                 .catch(e => {
+                    const escapedUrl = escapeHtml(options.config);
+                    const escapedError = escapeHtml(e.message);
                     document.write(`
                         <h3>Autocruise Configuration Error</h3>
-                         URL: ${options.config}<br>
-                         Error: ${e.message}
+                         URL: ${escapedUrl}<br>
+                         Error: ${escapedError}
                     `);
                     return null;
                 })
@@ -416,7 +430,18 @@ Currently defined parameters are:
         }
     }
 
-    
+
+    if (typeof window !== 'undefined') {
+        window.autocruise = window.autocruise || {};
+        window.autocruise.loadConfig = loadConfig;
+    }
+    if (typeof module !== 'undefined' && module.exports) {
+        module.exports = {
+            loadConfig,
+        };
+    }
+
+
     window.addEventListener('DOMContentLoaded', e => {
         loadConfig((config) => {
             if (config.pages.length == 0) {
