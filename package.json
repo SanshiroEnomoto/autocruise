@@ -1,0 +1,11 @@
+{
+  "name": "autocruise",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
