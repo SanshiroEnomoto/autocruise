@@ -147,7 +147,7 @@ Currently defined parameters are:
             const list = body.querySelectorAll('a');
             if (! (list.length > 0)) {
                 let message = autocruise_usage.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-                document.write(`<h3>autocruise.js</h3><pre>${message}<pre>`);
+                document.write(`<h3>autocruise.js</h3><pre>${message}</pre>`);
             }
             for (let i = 0; i < list.length; i++) {
                 const href = list[i].getAttribute('href');
@@ -383,7 +383,7 @@ Currently defined parameters are:
         
         let divs = document.querySelectorAll('.cruise-page');
         const n = divs.length;
-        const [ncols, nrows] = n > 6 ? [3, 3] : n > 4 ? [3, 2] : n > 2 ? [ 2, 2 ] : [2, 1];
+        const [ncols, nrows] = n > 6 ? [3, 3] : n > 4 ? [3, 2] : n > 2 ? [ 2, 2 ] : n > 1 ? [2, 1] : [1, 1];
 
         const margin = 5;
         const winWidth = window.innerWidth - margin;
