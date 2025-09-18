@@ -1,3 +1,8 @@
+/**
+ * @jest-environment jsdom
+ */
+
+
 const { loadConfig } = require('../autocruise.js');
 
 describe('loadConfig', () => {
@@ -42,12 +47,12 @@ describe('loadConfig', () => {
   });
 
   test('writes escaped error message when fetch fails', async () => {
-    window.history.replaceState({}, '', '/?config=<script>alert("xss")</script>');
+    window.history.replaceState({}, '', "/?config=<script>alert("xss")</script>");
     global.fetch = jest.fn().mockRejectedValue(new Error('<boom> & fail'));
 
     await runLoadConfig();
 
-    expect(document.body.innerHTML).toContain('&lt;script&gt;alert(&quot;xss&quot;)&lt;/script&gt;');
+    expect(document.body.innerHTML).toContain('&lt;script&gt;alert("xss")&lt;/script&gt;');
     expect(document.body.innerHTML).not.toContain('<script>');
     expect(document.body.innerHTML).toContain('&lt;boom&gt; &amp; fail');
   });
