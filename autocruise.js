@@ -241,10 +241,16 @@ Currently defined parameters are:
                 context.nextUpdate = time() + config.interval;
                 switchToCycleView(config, context);
             });
-            
-            // this works only for same-origin pages
-            iframe.contentWindow.addEventListener('click', e => {
-                holdCycleView(config, context);
+
+            iframe.addEventListener('load', ()=>{
+                try {
+                    iframe.contentWindow.addEventListener('click', e => {
+                        holdCycleView(config, context);
+                    });
+                }
+                catch (e) {
+                    ; // the code above works only for same-origin pages
+                }
             });
         }
         
@@ -315,13 +321,18 @@ Currently defined parameters are:
             context.nextUpdate = now + togo;
             
             let divs = document.querySelectorAll('.cruise-page');
-            divs[context.currentPage].style['z-index'] = '2';
             for (let i = 0; i < divs.length; i++) {
                 if (i != context.currentPage) {
                     divs[i].style['z-index'] = '0';
+                    divs[i].style.visibility = 'hidden';
+                    //divs[i].style.contentVisibility = 'hidden';  // this makes page switching too slow...
+                }
+                else {
+                    divs[i].style['z-index'] = '1';
+                    divs[i].style.visibility = 'visible';
+                    //divs[i].style.contentVisibility = 'visible';
                 }
             }
-            divs[context.currentPage].style['z-index'] = '1';            
         }
 
         if (context.statusDiv?.style?.color == 'gray') {
@@ -375,9 +386,13 @@ Currently defined parameters are:
 
             if (i == context.currentPage) {
                 div.style['z-index'] = '1';
+                div.style.visibility = 'visible';
+                //div.style.contentVisibility = 'visible';
             }
             else {
                 divs[i].style['z-index'] = '0';
+                div.style.visibility = 'hidden';
+                //div.style.contentVisibility = 'hidden';
             }
 
             iframe.contentWindow.postMessage('resize', "*");
@@ -416,6 +431,8 @@ Currently defined parameters are:
             div.style.top = (outerHeight * Math.floor(i / ncols) + margin) + "px";
             div.style.overflow = "hidden";
             div.style['z-index'] = '1';
+            div.style.visibility = 'visible';
+            //div.style.contentVisibility = 'visible';
             
             iframe.style.width = width / scale + "px";
             iframe.style.height = height / scale + "px";
