@@ -47,7 +47,7 @@ describe('loadConfig', () => {
   });
 
   test('writes escaped error message when fetch fails', async () => {
-    window.history.replaceState({}, '', "/?config=<script>alert("xss")</script>");
+    window.history.replaceState({}, '', '/?config=<script>alert("xss")</script>');
     global.fetch = jest.fn().mockRejectedValue(new Error('<boom> & fail'));
 
     await runLoadConfig();
